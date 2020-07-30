@@ -1,45 +1,42 @@
 const db = require('../helpers/mysql');
-const table = 'tb_user';
+const table = 'tb_room';
 
 module.exports = {
-    getUserM: (() => {
+    getRoomByIdM: (id => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * FROM ${table}`, ((err, result) => {
-                if (err) reject(err);
-                if (!result.length) reject({message: `Data is empty`});
-                resolve(result);
-            }))
-        })
-    }),
-    getUserByIdM: (id => {
-        return new Promise((resolve, reject) => {
-            console.log(`SELECT * FROM ${table} WHERE id=${id}`)
-            db.query(`SELECT * FROM ${table} WHERE id=?`, id, ((err, result) => {
+            db.query(`SELECT * FROM ${table} WHERE id=${id}`, ((err, result) => {
                 if (err) reject(err);
                 if (!result.length) reject({status: 402, message: 'InvalidError'});
                 resolve(result);
-            }))
+            }));
         })
     }),
-    getUserByUnameM: (uname => {
+    getRoomByUserM: ((user1, user2) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * FROM ${table} WHERE username=?`, uname, ((err, result) => {
+            db.query(`SELECT * FROM ${table} WHERE user1=${user1} AND user2=${user2}`, ((err, result) => {
                 if (err) reject(err);
-                if (!result.length) reject({status: 402, message: 'InvalidError'});
                 resolve(result);
             }))
         })
     }),
-    getUserByCodeM: (code => {
+    getUserRoomM: ((id_user) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * FROM ${table} WHERE code_user=?`, code, ((err, result) => {
+            db.query(`SELECT * FROM ${table} INNER JOIN tb_chat ON tb_chat.id = ${table}.id_chat WHERE user1=${id_user} OR user2=${id_user} ORDER BY tb_chat.id DESC`, ((err, result) => {
                 if (err) reject(err);
-                if (!result.length) reject({status: 402, message: 'InvalidError'});
+                if (!result.length) reject({status: 404, message: 'EmptyError'});
                 resolve(result);
             }))
         })
     }),
-    updateUserByIdM: ((data, id) => {
+    addRoomM: (data => {
+        return new Promise((resolve, reject) => {
+            db.query(`INSERT INTO ${table} SET ?`, data, ((err, result) => {
+                if (err) reject(err);
+                resolve(result);
+            }))
+        })
+    }),
+    updateRoomByIdM: ((data, id) => {
         return new Promise((resolve, reject) => {
             db.query(`UPDATE ${table} SET ? WHERE id=?`, [data, id], ((err, result) => {
                 if (err) reject(err);
