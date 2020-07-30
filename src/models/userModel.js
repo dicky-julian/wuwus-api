@@ -16,7 +16,7 @@ module.exports = {
             console.log(`SELECT * FROM ${table} WHERE id=${id}`)
             db.query(`SELECT * FROM ${table} WHERE id=?`, id, ((err, result) => {
                 if (err) reject(err);
-                if (!result.length) reject({status: 402, message: 'InvalidError'});
+                if (!result.length) reject({status: 404, message: 'EmptyError'});
                 resolve(result);
             }))
         })
@@ -25,7 +25,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.query(`SELECT * FROM ${table} WHERE username=?`, uname, ((err, result) => {
                 if (err) reject(err);
-                if (!result.length) reject({status: 402, message: 'InvalidError'});
+                if (!result.length) reject({status: 404, message: 'EmptyError'});
                 resolve(result);
             }))
         })
@@ -34,7 +34,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.query(`SELECT * FROM ${table} WHERE code_user=?`, code, ((err, result) => {
                 if (err) reject(err);
-                if (!result.length) reject({status: 402, message: 'InvalidError'});
+                if (!result.length) reject({status: 404, message: 'EmptyError'});
                 resolve(result);
             }))
         })
