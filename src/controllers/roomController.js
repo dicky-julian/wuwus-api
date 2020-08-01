@@ -1,5 +1,4 @@
 const User = require('../models/userModel');
-const Chat = require('../models/chatModel');
 const Room = require('../models/roomModel');
 const { setResponse } = require('../helpers');
 
@@ -10,6 +9,7 @@ module.exports = {
             const roomData = await Room.getUserRoomM(id_user);
             return setResponse(res, 200, 'Success to Get a Data', roomData);
         } catch (err) {
+            console.log(err)
             return setResponse(res, err.status || 400, err.message);
         }
     }),
@@ -24,15 +24,10 @@ module.exports = {
             }
             const room = await Room.getRoomByUserM(data.user1, data.user2);
             if (room.length) return setResponse(res, 402, 'DuplicateError');
-            const chatData = {
-                id_room: 00000,
-                id_user: id_user
-            }
-            const addChat = await Chat.addChatM(chatData);
-            data.id_chat = addChat.insertId;
             await Room.addRoomM(data);
-            return setResponse(res, 200, 'Successfully Add Room');
+            return setResponse(res, 200, 'Successfully Add Room', user2Data[0]);
         } catch (err) {
+            console.log(err);
             return setResponse(res, err.status || 400, err.message);
         }
     })

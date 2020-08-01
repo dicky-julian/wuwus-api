@@ -21,8 +21,9 @@ module.exports = {
     }),
     getUserRoomM: ((id_user) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * FROM ${table} INNER JOIN tb_chat ON tb_chat.id = ${table}.id_chat WHERE user1=${id_user} OR user2=${id_user} ORDER BY tb_chat.id DESC`, ((err, result) => {
+            db.query(`SELECT * FROM ${table} LEFT OUTER JOIN tb_chat ON tb_chat.id = ${table}.id_chat WHERE user1=${id_user} OR user2=${id_user} ORDER BY ${table}.updated_at DESC`, ((err, result) => {
                 if (err) reject(err);
+                if (!result) reject({status: 404, message: 'EmptyError'});
                 if (!result.length) reject({status: 404, message: 'EmptyError'});
                 resolve(result);
             }))

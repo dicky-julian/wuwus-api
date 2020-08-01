@@ -13,7 +13,6 @@ module.exports = {
     }),
     getUserByIdM: (id => {
         return new Promise((resolve, reject) => {
-            console.log(`SELECT * FROM ${table} WHERE id=${id}`)
             db.query(`SELECT * FROM ${table} WHERE id=?`, id, ((err, result) => {
                 if (err) reject(err);
                 if (!result.length) reject({status: 404, message: 'EmptyError'});
