@@ -14,7 +14,9 @@ module.exports = {
     updateUserByIdC: (async (req, res) => {
         try {
             const id_user = req.params.id;
-            const data = req.body;
+            let data;
+            if (req.file) data = { 'image': req.file.filename }
+            else data = req.body;
             await User.updateUserByIdM(data, id_user);
             return setResponse(res, 200, `Success to Update User's data`);
         } catch (err) {

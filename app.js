@@ -29,6 +29,6 @@ io.on('connection', socket => {
     socket.on('disconnect', () => console.log('user disconnect'));
 })
 
-server.listen(process.env.PORT_APP, (() => {
+server.listen(process.env.PORT_APP, function() {
     console.log(`Library App runnig port ${process.env.PORT_APP}`);
-}));
+});
