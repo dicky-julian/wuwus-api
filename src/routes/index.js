@@ -10,5 +10,6 @@ router.use('/', authRouter);
 router.use('/chat', chatRouter);
 router.use('/room', roomRouter);
 router.use('/user', userRouter);
+router.use('/images', express.static(`${__dirname}./../public/images`));
 
 module.exports = router;

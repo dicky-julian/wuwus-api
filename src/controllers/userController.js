@@ -15,10 +15,11 @@ module.exports = {
         try {
             const id_user = req.params.id;
             let data;
+            console.log(req);
             if (req.file) data = { 'image': req.file.filename }
             else data = req.body;
             await User.updateUserByIdM(data, id_user);
-            return setResponse(res, 200, `Success to Update User's data`);
+            return setResponse(res, 200, `Success to Update User's data`, data);
         } catch (err) {
             return setResponse(res, err.status || 400, err.message);
         }
