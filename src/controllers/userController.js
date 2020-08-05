@@ -1,5 +1,5 @@
 const User = require('../models/userModel');
-const { setResponse } = require('../helpers');
+const { setResponse, unlinkFile } = require('../helpers');
 
 module.exports = {
     getUserByIdC: (async (req, res) => {
@@ -15,8 +15,14 @@ module.exports = {
         try {
             const id_user = req.params.id;
             let data;
-            console.log(req);
-            if (req.file) data = { 'image': req.file.filename }
+            const userData = await User.getUserByIdM(id_user);
+            if (req.file) {
+                data = { 'image': req.file.filename };
+                req.io.emit('updateImage', { id_user: id_user, image: req.file.filename });
+                if (userData[0].image) {
+                    unlinkFile(`${__dirname}./../public/images/${userData[0].image}`);
+                }
+            }
             else data = req.body;
             await User.updateUserByIdM(data, id_user);
             return setResponse(res, 200, `Success to Update User's data`, data);

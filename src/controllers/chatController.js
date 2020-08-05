@@ -19,7 +19,7 @@ module.exports = {
             const chat = await Chat.addChatM(data);
 
             const roomData = {
-                status: data.id_user == room[0].user1 ? 1 : 2,
+                status: data.id_user == room[0].user1 ? 2 : 3,
                 id_chat: chat.insertId,
                 last_chat: data.message
             }

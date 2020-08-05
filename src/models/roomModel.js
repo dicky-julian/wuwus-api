@@ -6,7 +6,7 @@ module.exports = {
         return new Promise((resolve, reject) => {
             db.query(`SELECT * FROM ${table} WHERE id=${id}`, ((err, result) => {
                 if (err) reject(err);
-                if (!result.length) reject({status: 404, message: 'EmptyError'});
+                if (!result.length) reject({ status: 404, message: 'EmptyError' });
                 resolve(result);
             }));
         })
@@ -21,10 +21,11 @@ module.exports = {
     }),
     getUserRoomM: ((id_user) => {
         return new Promise((resolve, reject) => {
-            db.query(`SELECT * FROM ${table} LEFT OUTER JOIN tb_chat ON tb_chat.id = ${table}.id_chat WHERE user1=${id_user} OR user2=${id_user} ORDER BY ${table}.updated_at DESC`, ((err, result) => {
+            // db.query(`SELECT * FROM ${table} LEFT OUTER JOIN tb_chat ON tb_chat.id = ${table}.id_chat WHERE user1=${id_user} OR user2=${id_user} ORDER BY ${table}.updated_at DESC`, ((err, result) => {
+            db.query(`SELECT R.*, C.message FROM tb_room R LEFT JOIN tb_chat C ON R.id_chat = C.id WHERE R.user1=${id_user} OR R.user2=${id_user} ORDER BY R.updated_at DESC`, ((err, result) => {
                 if (err) reject(err);
-                if (!result) reject({status: 404, message: 'EmptyError'});
-                if (!result.length) reject({status: 404, message: 'EmptyError'});
+                if (!result) reject({ status: 404, message: 'EmptyError' });
+                if (!result.length) reject({ status: 404, message: 'EmptyError' });
                 resolve(result);
             }))
         })
